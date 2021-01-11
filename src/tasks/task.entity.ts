@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer'
 import { User } from 'src/auth/user.entity'
 import {
   BaseEntity,
@@ -28,4 +29,8 @@ export class Task extends BaseEntity {
     { eager: false },
   )
   user: User
+
+  @Column()
+  @Exclude()
+  userId: number
 }
