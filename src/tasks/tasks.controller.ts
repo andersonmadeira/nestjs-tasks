@@ -20,27 +20,27 @@ import { TasksService } from './tasks.service'
 
 @Controller('tasks')
 export class TasksController {
-  constructor(private taskService: TasksService) {}
+  constructor(private service: TasksService) {}
 
   @Get()
   get(@Query(ValidationPipe) dto: FilterTasksDto): Promise<Task[]> {
-    return this.taskService.getTasks(dto)
+    return this.service.getTasks(dto)
   }
 
   @Get('/:id')
   getById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
-    return this.taskService.getById(id)
+    return this.service.getById(id)
   }
 
   @Post()
   @UsePipes(ValidationPipe)
   create(@Body() dto: CreateTaskDto) {
-    return this.taskService.create(dto)
+    return this.service.create(dto)
   }
 
   @Delete('/:id')
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.taskService.delete(id)
+    return this.service.delete(id)
   }
 
   @Patch('/:id/status')
@@ -48,6 +48,6 @@ export class TasksController {
     @Param('id') id: number,
     @Body('status', TaskStatusValidation) status: TaskStatus,
   ): Promise<Task> {
-    return this.taskService.updateStatus(id, status)
+    return this.service.updateStatus(id, status)
   }
 }

@@ -4,9 +4,10 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { typeOrgConfig } from './config/typeorm.config'
 import { TasksModule } from './tasks/tasks.module'
+import { AuthModule } from './auth/auth.module'
 
 @Module({
-  imports: [TasksModule, TypeOrmModule.forRoot(typeOrgConfig)],
+  imports: [TasksModule, TypeOrmModule.forRoot(typeOrgConfig), AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
