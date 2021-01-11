@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -9,10 +10,13 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
+import { GetUser } from 'src/auth/get-user.decorator'
+import { User } from 'src/auth/user.entity'
 import { CreateTaskDto } from './dto/create-task.dto'
 import { FilterTasksDto } from './dto/filter-tasks.dto'
 import { TaskStatusValidation } from './pipes/task-status-validation.pipe'
@@ -22,6 +26,7 @@ import { TasksService } from './tasks.service'
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
+@UseInterceptors(ClassSerializerInterceptor)
 export class TasksController {
   constructor(private service: TasksService) {}
 
@@ -37,8 +42,8 @@ export class TasksController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  create(@Body() dto: CreateTaskDto) {
-    return this.service.create(dto)
+  create(@Body() dto: CreateTaskDto, @GetUser() user: User) {
+    return this.service.create(dto, user)
   }
 
   @Delete('/:id')

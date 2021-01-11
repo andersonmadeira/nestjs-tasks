@@ -1,9 +1,11 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Post,
   UseGuards,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
@@ -12,9 +14,9 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto'
 import { LoginSuccessDto } from './dto/login-success.dto'
 import { User } from './user.entity'
 import { GetUser } from './get-user.decorator'
-import { UserDto } from './dto/user.dto'
 
 @Controller('auth')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private service: AuthService) {}
 
@@ -32,8 +34,7 @@ export class AuthController {
 
   @Get('/me')
   @UseGuards(AuthGuard())
-  getUser(@GetUser() user: User): UserDto {
-    const { id, username } = user
-    return { id, username }
+  getUser(@GetUser() user: User): User {
+    return user
   }
 }
